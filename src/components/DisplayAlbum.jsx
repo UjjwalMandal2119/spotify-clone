@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Navbar from './Navbar'
 import { useParams } from 'react-router-dom'
 import { albumsData, assets, songsData } from '../assets/assets'
+import { PlayerContext } from '../context/PlayerContext'
 
 const DisplayAlbum = () => {
   const { id } = useParams()
   const albumData = albumsData[id]
+  const {playWithId} = useContext(PlayerContext)
 
   // safety check
   if (!albumData) {
@@ -46,21 +48,23 @@ const DisplayAlbum = () => {
 
       {/* Songs List */}
       {songsData.map((item, index) => (
-        <div
-          key={index}
-          className='grid grid-cols-3 sm:grid-cols-4 gap-2 p-2 items-center text-[#a7a7a7] hover:bg-[#ffffff2b] cursor-pointer'
-        >
-          <p className='text-white flex items-center'>
-            <b className='mr-4 text-[#a7a7a7]'>{index + 1}</b>
-            <img className='w-10 mr-5' src={item.image} alt={item.name} />
-            {item.name}
-          </p>
+  <div
+    onClick={() => playWithId(item.id)}
+    key={item.id}
+    className='grid grid-cols-3 sm:grid-cols-4 gap-2 p-2 items-center text-[#a7a7a7] hover:bg-[#ffffff2b] cursor-pointer'
+  >
+    <p className='text-white flex items-center'>
+      <b className='mr-4 text-[#a7a7a7]'>{index + 1}</b>
+      <img className='w-10 mr-5' src={item.image} alt={item.name} />
+      {item.name}
+    </p>
 
-          <p className='text-[15px]'>{albumData.name}</p>
-          <p className='text-[15px] hidden sm:block'>5 days ago</p>
-          <p className='text-[15px] text-center'>{item.duration}</p>
-        </div>
-      ))}
+    <p className='text-[15px]'>{albumData.name}</p>
+    <p className='text-[15px] hidden sm:block'>5 days ago</p>
+    <p className='text-[15px] text-center'>{item.duration}</p>
+  </div>
+))}
+
     </>
   )
 }
